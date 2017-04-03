@@ -27,7 +27,7 @@ body {
     cursor: pointer;
 }
 
-.navbar.links-container {
+.navbar .links-container {
     display: table;
     position: absolute;
     top: 0;
@@ -64,6 +64,10 @@ body {
 .container {
     margin: 0 auto;
     max-width: 64rem;
+}
+
+.container.narrow {
+    max-width: 56rem;
 }
 
 @media (min-width: 640px) {

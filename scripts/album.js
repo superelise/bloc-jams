@@ -30,41 +30,74 @@ var albumMarconi = {
      ]
  };
 
+// Third Example Album
+var albumBeatles = {
+    title: 'The Rock',
+    artist: 'The Beatles',
+    label: 'Rock',
+    year: '1960',
+    albumArtUrl: 'assets/images/album_covers/12.png',
+    songs: [
+         { title: 'Hey Jude', duration: '2:31' },
+         { title: 'Penny Lane', duration: '4:34' },
+         { title: 'A Day in the Life', duration: '3:18'},
+         { title: 'Here Comes the Sun', duration: '3:30' },
+         { title: 'I Want to Hold Your Hand', duration: '4:17'}
+    ]
+};
+
+
 var createSongRow = function(songNumber, songName, songLength) {
     var template = 
-        '<tr classs="album-view-song-item">'
+        '<tr class="album-view-song-item">'
     + '<td class = "song-item-number">' + songNumber + '</td>'
     + '<td class = "song-item-title">' + songName + '</td>'
     + '<td class = "song-item-duration">' + songLength + '</td>'
-    +'</tr'
+    +'</tr>'
     ;
     
     return template;
 }
 
+     // #1 select elements that we want to populate with text dynamically
+ var albumTitle = document.getElementsByClassName('album-view-title')[0];
+ var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+ var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+ var albumImage = document.getElementsByClassName('album-cover-art')[0];
+ var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album) {
-     // #1
-     var albumTitle = document.getElementsByClassName('album-view-title')[0];
-     var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-     var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-     var albumImage = document.getElementsByClassName('album-cover-art')[0];
-     var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
  
-     // #2
+     // #2 assign values to each part of the album (text, images)
      albumTitle.firstChild.nodeValue = album.title;
      albumArtist.firstChild.nodeValue = album.artist;
      albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
      albumImage.setAttribute('src', album.albumArtUrl);
  
-     // #3
+     // #3 clear contents of album song list container
      albumSongList.innerHTML = '';
  
-     // #4
+     // #4 build list of songs from album javascript objct
      for (var i = 0; i < album.songs.length; i++) {
          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
      }
  };
  
  window.onload = function() {
+     
      setCurrentAlbum(albumPicasso);
+         // Toggle albums
+    var albums = [albumPicasso, albumMarconi, albumBeatles];
+    var index = 1;
+    albumImage.addEventListener("click", function(event) {
+            setCurrentAlbum(albums[index]);
+            index++;
+            if (index == albums.length) {
+                index = 0;
+            }
+       });
  };
+
+
+
+

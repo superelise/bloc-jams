@@ -16,6 +16,22 @@
  var $previousButton = $('.main-controls .previous');
  var $nextButton = $('.main-controls .next');
 
+ // Player Bar Control
+ var $barPlayPause = $('.main-controls .play-pause')
+ 
+ var togglePlayFromPlayerBar = function() {
+     if (currentSoundFile.isPaused()) {
+         $(this).html(playButtonTemplate);
+         $barPlayPause.html(playerBarPlayButton);
+         currentSoundFile.play();
+     }
+     else {
+         $(this).html(pauseButtonTemplate);
+         $barPlayPause.html(playerBarPauseButton);
+         currentSoundFile.pause();
+     }
+ };
+
 var setSong = function(songNumber) {
     // Prevent multiple songs from playing concurrently
     if (currentSoundFile) {
@@ -58,33 +74,31 @@ var createSongRow = function(songNumber, songName, songLength) {
 
     var $row = $(template);
 
-    var clickHandler = function() {
-    	var songNumber = $(this).attr('data-song-number');
+var clickHandler = function() {
+    var songNum = parseInt($(this).attr('data-song-number'));
 
-    	if (currentlyPlayingSongNumber !== null) {
-    		// Revert to song number for currently playing song because user started playing new song.
-    		var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
-    		currentlyPlayingCell.html(currentlyPlayingSongNumber);
-    	}
-    	if (currentlyPlayingSongNumber !== songNumber) {
-    		// Switch from Play -> Pause button to indicate new song is playing.
-    		$(this).html(pauseButtonTemplate);
-    		setSong(songNumber);
-            currentSoundFile.play();
-    	} else if (currentlyPlayingSongNumber === songNumber) {
-            
-            if (currentSoundFile.isPaused()){
-                $(this).html(pauseButtonTemplate);
-                $('.main-controls .play-pause').html(playerBarPauseButton);
-                currentSoundFile.play();
-            } else {
-                $(this).html(playButtonTemplate);
-                $('.main-controls .play-pause').html(playerBarPauseButton);
-                currentSoundFile.pause();
-            }
-            
-    	}
-    };
+    if (currentlyPlayingSongNumber === null) {
+      $(this).html(pauseButtonTemplate);
+      setSong(songNum);
+      currentSoundFile.play();
+    } else if (currentlyPlayingSongNumber === songNum) {
+      if (currentSoundFile.isPaused()) {
+        $(this).html(pauseButtonTemplate);
+        currentSoundFile.play();
+      } else {
+        $(this).html(playButtonTemplate);
+        currentSoundFile.pause();
+      }
+    }
+    else if (currentlyPlayingSongNumber !== songNum) {
+      var $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
+      $currentlyPlayingSongElement.html(currentlyPlayingSongNumber);
+      $(this).html(pauseButtonTemplate);
+      setSong(songNum);
+      currentSoundFile.play();
+    }
+  };
+    
 
     var onHover = function(event) {
           var songNumberCell = $(this).find('.song-item-number');
@@ -216,4 +230,5 @@ var previousSong = function() {
      setCurrentAlbum(albumPicasso);
      $previousButton.click(previousSong);
      $nextButton.click(nextSong);
+     $barPlayPause.click(togglePlayFromPlayerBar);
  });

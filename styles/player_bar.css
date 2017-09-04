@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   height: 200px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.2);
   z-index: 100;
 }
 .player-bar a,
